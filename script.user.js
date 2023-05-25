@@ -16,6 +16,7 @@
   );
 
   function removeTargets() {
+    console.info('[GitHub Feed Blacklist] start to remove targets');
     const followingContainers = document.querySelectorAll(
       "span.user-following-container"
     );
@@ -52,6 +53,7 @@
         }
       });
     }
+    console.info('[GitHub Feed Blacklist] remove targets done');
   }
 
   function observeFeedFrame(feedFrame) {
