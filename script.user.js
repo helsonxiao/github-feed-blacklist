@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         GitHub Feed Blacklist
 // @namespace    https://github.com/helsonxiao
-// @version      0.2.1
+// @version      0.2.2
 // @description  GitHub Feed 黑名单插件
 // @author       helsonxiao
 // @match        https://github.com/
@@ -16,7 +16,7 @@
   );
 
   function removeTargets() {
-    console.info('[GitHub Feed Blacklist] start to remove targets');
+    console.info("[GitHub Feed Blacklist] start to remove targets");
     const followingContainers = document.querySelectorAll(
       "span.user-following-container"
     );
@@ -53,15 +53,19 @@
         }
       });
     }
-    console.info('[GitHub Feed Blacklist] remove targets done');
+    console.info("[GitHub Feed Blacklist] remove targets done");
   }
 
   function observeFeedFrame(feedFrame) {
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
-        if (mutation.addedNodes.length > 0) {
-          removeTargets();
-        }
+        removeTargets();
+        mutation.addedNodes.forEach((node) => {
+          if (node.id === "conduit-feed-frame") {
+            observer.disconnect();
+            observeFeedFrame(node);
+          }
+        });
       });
     });
     observer.observe(feedFrame, {
